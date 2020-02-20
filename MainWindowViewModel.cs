@@ -19,19 +19,28 @@ namespace GUI7
     {
         ObservableCollection<Agent> AgentList = new ObservableCollection<Agent>();
         int _currentIndex = 0;
+        int _numberOfAgents;
+        string _filename = null;
+        string _availableFiletypes = "xml files (*.xml)|*.xml";
         Agent _currentAgent = null;
-
-        public Agent CurrentAgent
-        {
-            get => _currentAgent;
-            set => SetProperty(ref _currentAgent, value);
-        }
 
         public MainWindowViewModel()
         {
             AgentList.Add(new Agent("007", "Rasmus", "Rogue", "Steal yo mama"));
             AgentList.Add(new Agent("008", "Benjamin", "Mage", "Boom"));
         }
+        public Agent CurrentAgent
+        {
+            get => _currentAgent;
+            set => SetProperty(ref _currentAgent, value);
+        }
+
+        public string Filename
+        {
+            get => _filename;
+            private set => SetProperty(ref _filename, value);
+        }
+        
         public ObservableCollection<Agent> AgentList_
         {
             get => AgentList;
@@ -97,52 +106,77 @@ namespace GUI7
         {
             get 
             {
-                return _saveAs ?? (_saveAs = new DelegateCommand(() =>
-                {
-                    //executeSaveAs();
-                }));
+                return _saveAs ?? (_saveAs = new DelegateCommand(() => { executeSaveAs(); }));
             }
         }
 
-        //public void executeSaveAs()
-        //{
-        //    Stream stream = File.OpenWrite(".xml");
-        //    XmlSerializer sr = new XmlSerializer(typeof(ObservableCollection<Agent>));
-        //    sr.Serialize(stream, AgentList_);
-        //    SaveFileDialog saveFileDialog1 = new SaveFileDialog();
-        //    saveFileDialog1.Filter = "*.xml";
-        //    saveFileDialog1.Title = "Save an Image File";
-        //    saveFileDialog1.ShowDialog();
+        public void executeSaveAs()
+        {
+            XmlSerializer XML_serial = new XmlSerializer(typeof(ObservableCollection<Agent>));
 
-        //    stream.Close();
-        //}
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+            saveFileDialog1.Filter = _availableFiletypes;
+            saveFileDialog1.ShowDialog();
+            Filename = saveFileDialog1.FileName;
+
+            TextWriter writer = new StreamWriter(Filename);
+
+            XML_serial.Serialize(writer, AgentList);
+
+            writer.Close();
+        }
 
         ICommand _open;
         public ICommand Open
         {
             get
             {
-                return _open ?? (_open = new DelegateCommand(() =>
-                {
-
-                }));
+                return _open ?? (_open = new DelegateCommand(() => { executeOpen(); }));
             }
         }
+
+        public void executeOpen()
+        {
+            XmlSerializer XML_serial = new XmlSerializer(typeof(ObservableCollection<Agent>));
+
+
+            OpenFileDialog OpenFileDialog1 = new OpenFileDialog();
+            OpenFileDialog1.Filter = _availableFiletypes;
+            OpenFileDialog1.ShowDialog();
+            Filename = OpenFileDialog1.FileName;
+            FileStream fs = new FileStream(Filename, FileMode.Open);
+            AgentList_ = (ObservableCollection<Agent>)XML_serial.Deserialize(fs);
+            fs.Close();
+        }
+
         ICommand _save;
         public ICommand Save
         {
             get
             {
-                return _save ?? (_save = new DelegateCommand(() =>
-                {
-
-                }));
+                return _save ?? (_save = new DelegateCommand(() => { executeSave(); }));
             }
         }
 
+        public void executeSave()
+        {
+            XmlSerializer XML_serial = new XmlSerializer(typeof(ObservableCollection<Agent>));
+            TextWriter writer = new StreamWriter(Filename);
+            XML_serial.Serialize(writer, AgentList);
+            writer.Close();
+        }
 
-
-
+        ICommand _color;
+        public ICommand Color
+        {
+            get
+            {
+                return _color ?? (_color = new DelegateCommand(() =>
+                {
+                    
+                }));
+            }
+        }
     }
 }
 

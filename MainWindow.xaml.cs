@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace AgentAssignmentNetCore
 {
@@ -23,6 +24,17 @@ namespace AgentAssignmentNetCore
         public MainWindow()
         {
             InitializeComponent();
+            DispatcherTimer timer = new DispatcherTimer();
+            DateTime dateValue = new System.DateTime(2013, 5, 28, 10, 30, 15);
+            timer.Interval = TimeSpan.FromSeconds(1);
+            timer.Tick += timer_Tick;
+            timer.Start();
+        }
+
+        void timer_Tick(object sender, EventArgs e)
+        {
+            lblTime.Content = DateTime.Now.ToString("dd/MM/yyyy HH;mm;ss");
         }
     }
 }
+

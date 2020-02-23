@@ -11,6 +11,8 @@ using System.Windows.Input;
 using System.Xml.Serialization;
 using System.IO;
 using Microsoft.Win32;
+using System.Drawing;
+using System.Windows.Media;
 
 namespace GUI7
 {
@@ -20,6 +22,7 @@ namespace GUI7
         ObservableCollection<Agent> AgentList = new ObservableCollection<Agent>();
         int _currentIndex = 0;
         int _numberOfAgents;
+        System.Windows.Media.Color background;
         string _filename = null;
         string _availableFiletypes = "xml files (*.xml)|*.xml";
         Agent _currentAgent = null;
@@ -40,7 +43,17 @@ namespace GUI7
             get => _filename;
             private set => SetProperty(ref _filename, value);
         }
-        
+
+
+        public System.Windows.Media.Color SliderValue
+        {
+            get => background;
+            set
+            {
+                background.R = ;
+            }
+        }
+
         public ObservableCollection<Agent> AgentList_
         {
             get => AgentList;
@@ -176,6 +189,11 @@ namespace GUI7
                     
                 }));
             }
+        }
+
+        public void changeColor(string color)
+        { 
+           
         }
     }
 }

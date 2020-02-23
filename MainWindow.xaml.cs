@@ -35,11 +35,6 @@ namespace AgentAssignmentNetCore
         {
             lblTime.Content = DateTime.Now.ToString("dd/MM/yyyy HH;mm;ss");
         }
-
-        private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-
-        }
     }
 }
 

@@ -21,12 +21,10 @@ namespace GUI7
     {
         ObservableCollection<Agent> AgentList = new ObservableCollection<Agent>();
         int _currentIndex = 0;
-        int _numberOfAgents;
-        System.Windows.Media.Color background;
         string _filename = null;
         string _availableFiletypes = "xml files (*.xml)|*.xml";
         Agent _currentAgent = null;
-
+        byte r, g, b;
         public MainWindowViewModel()
         {
             AgentList.Add(new Agent("007", "Rasmus", "Rogue", "Steal yo mama"));
@@ -44,15 +42,10 @@ namespace GUI7
             private set => SetProperty(ref _filename, value);
         }
 
+        public byte R { get; set; }
+        public byte G { get; set; }
+        public byte B { get; set; }
 
-        public System.Windows.Media.Color SliderValue
-        {
-            get => background;
-            set
-            {
-                background.R = ;
-            }
-        }
 
         public ObservableCollection<Agent> AgentList_
         {
@@ -117,7 +110,7 @@ namespace GUI7
         ICommand _saveAs;
         public ICommand SaveAs
         {
-            get 
+            get
             {
                 return _saveAs ?? (_saveAs = new DelegateCommand(() => { executeSaveAs(); }));
             }
@@ -177,23 +170,6 @@ namespace GUI7
             TextWriter writer = new StreamWriter(Filename);
             XML_serial.Serialize(writer, AgentList);
             writer.Close();
-        }
-
-        ICommand _color;
-        public ICommand Color
-        {
-            get
-            {
-                return _color ?? (_color = new DelegateCommand(() =>
-                {
-                    
-                }));
-            }
-        }
-
-        public void changeColor(string color)
-        { 
-           
         }
     }
 }

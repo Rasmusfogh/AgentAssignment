@@ -5,22 +5,37 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GUI7"
         mc:Ignorable="d"
-		Background="{DynamicResource myBrush}"
         Title="MainWindow" Height="450" Width="800">
 
 	<Window.DataContext>
 		<local:MainWindowViewModel/>
 	</Window.DataContext>
 
+	<Window.Resources>
+		<local:RGBtoSolidColorConverter x:Key="RGBconverter"/>
+		<local:HighlightTextConverter x:Key="HighlightConverter"/>
+	</Window.Resources>
+
 	<Window.Background>
 		<SolidColorBrush>
+			
 			<SolidColorBrush.Color>
 				<MultiBinding Converter="{StaticResource RGBconverter}">
-					
+					<Binding Path="Value" ElementName="redSlider"/>
+					<Binding Path="Value" ElementName="greenSlider"/>
+					<Binding Path="Value" ElementName="blueSlider"/>
 				</MultiBinding>
 			</SolidColorBrush.Color>
 		</SolidColorBrush>
 	</Window.Background>
+
+	<DataTrigger Binding="{Binding Path=ID, Converter={StaticResource HighlightConverter}, ConverterParameter='007'}" Value="true" >
+		<Setter  Property="txbAgents.Background">
+			<Setter.Value>
+				<SolidColorBrush Color="RosyBrown" />
+			</Setter.Value>
+		</Setter>
+	</DataTrigger>
 
 	<Grid>
 		<Grid.RowDefinitions>
@@ -45,7 +60,18 @@
 		<TextBox x:Name="tbxCodeName" Text="{Binding Path=CurrentAgent.CodeName, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" HorizontalAlignment="Left" Height="22" Margin="6,0,0,0" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Center" Width="264" FontSize="12"/>
 		<TextBox x:Name="tbxSpeciality" Text="{Binding Path=CurrentAgent.Speciality}" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="6,0,0,0" Grid.Row="3" TextWrapping="Wrap" VerticalAlignment="Center" Width="264" FontSize="12"/>
 		<TextBox x:Name="tbxAssignment" Text="{Binding Path=CurrentAgent.Assignment}" Grid.Column="1" HorizontalAlignment="Left" Height="76" Margin="6,7,0,0" Grid.Row="4" TextWrapping="Wrap" VerticalAlignment="Top" Width="264" FontSize="12"/>
-		<ListBox x:Name="txbAgents" SelectedIndex="{Binding CurrentIndex}" ItemsSource="{Binding AgentList_}" SelectedItem="{Binding CurrentAgent}" IsSynchronizedWithCurrentItem="True" DisplayMemberPath="CodeName" Grid.Column="2" HorizontalAlignment="Left" Height="276" Margin="6,0,0,0" Grid.RowSpan="4" VerticalAlignment="Center" Width="283" Grid.Row="1"/>
+		<ListBox x:Name="txbAgents" SelectedIndex="{Binding CurrentIndex}" ItemsSource="{Binding AgentList_}" SelectedItem="{Binding CurrentAgent}" IsSynchronizedWithCurrentItem="True" Grid.Column="2" HorizontalAlignment="Left" Height="276" Margin="6,0,0,0" Grid.RowSpan="4" VerticalAlignment="Center" Width="336" Grid.Row="1">
+			<ListBox.ItemTemplate>
+				<DataTemplate>
+					<WrapPanel x:Name="wrapPanel1">
+						<TextBlock Text="{Binding Path=ID}" Width="30" x:Name="IDlist"/>
+						<TextBlock Text="{Binding Path=CodeName}" Width="100"/>
+						<TextBlock Text="{Binding Path=Speciality}" Width="100"/>
+						<TextBlock Text="{Binding Path=Assignment}" Width="200"/>
+					</WrapPanel>
+				</DataTemplate>
+			</ListBox.ItemTemplate>
+		</ListBox>
 		<Button Content="&lt;" Command="{Binding Path=PreviousAgent}" Grid.Column="1" HorizontalAlignment="Left" Margin="6,100,0,0" Grid.Row="4" VerticalAlignment="Top" Width="63" Height="20"/>
 		<Button Content="&gt;" Command="{Binding Path=NextAgent}" Grid.Column="1" HorizontalAlignment="Left" Margin="84,100,0,0" Grid.Row="4" VerticalAlignment="Top" Width="63" Height="20"/>
 		<Button x:Name="addNew" Command="{Binding Path=NewAgent}" Content="Add new" Grid.Column="1" HorizontalAlignment="Left" Margin="166,100,0,0" Grid.Row="4" VerticalAlignment="Top" Width="75" RenderTransformOrigin="0.082,0.605" Height="20"/>
@@ -68,7 +94,9 @@
 			</MenuItem>
 
 			<MenuItem Header="Menu Color">
-				<Slider Maximum="100" Minimum="1" Width="100" Height="20" Value="{Binding SliderValue}" ValueChanged="Slider_ValueChanged" Name="slider1"/>
+				<Slider Maximum="255" Minimum="1" Width="100" Height="20" Value="{Binding R}" x:Name="redSlider"/>
+				<Slider Maximum="255" Minimum="1" Width="100" Height="20" Value="{Binding G}" x:Name="greenSlider"/>
+				<Slider Maximum="255" Minimum="1" Width="100" Height="20" Value="{Binding B}" x:Name="blueSlider"/>
 			</MenuItem>
 		</Menu>
 
@@ -106,7 +134,8 @@
 				<Label Name="lblTime" Height="23" Width="Auto" Grid.Row="6" Grid.Column="3"/>
 			</StatusBarItem>
 		</StatusBar>
-
 	</Grid>
+	
+	
 </Window>
 

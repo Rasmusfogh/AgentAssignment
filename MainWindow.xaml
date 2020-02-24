@@ -14,11 +14,12 @@
 	<Window.Resources>
 		<local:RGBtoSolidColorConverter x:Key="RGBconverter"/>
 		<local:HighlightTextConverter x:Key="HighlightConverter"/>
+		<local:ListOfAgent x:Key="ListAgent"/>
+		<CollectionViewSource x:Key="filtered_agents" Source="{StaticResource ListAgent}" Filter="CollectionViewSource_Filter"/>
 	</Window.Resources>
 
 	<Window.Background>
 		<SolidColorBrush>
-			
 			<SolidColorBrush.Color>
 				<MultiBinding Converter="{StaticResource RGBconverter}">
 					<Binding Path="Value" ElementName="redSlider"/>
@@ -28,14 +29,8 @@
 			</SolidColorBrush.Color>
 		</SolidColorBrush>
 	</Window.Background>
+	
 
-	<DataTrigger Binding="{Binding Path=ID, Converter={StaticResource HighlightConverter}, ConverterParameter='007'}" Value="true" >
-		<Setter  Property="txbAgents.Background">
-			<Setter.Value>
-				<SolidColorBrush Color="RosyBrown" />
-			</Setter.Value>
-		</Setter>
-	</DataTrigger>
 
 	<Grid>
 		<Grid.RowDefinitions>
@@ -56,19 +51,28 @@
 		<Label Content="Code Name" HorizontalAlignment="Left" Margin="52,0,0,0" Grid.Row="2" VerticalAlignment="Center" FontSize="14" Height="28" Width="83"/>
 		<Label Content="Speciality" HorizontalAlignment="Left" Margin="52,0,0,0" Grid.Row="3" VerticalAlignment="Center" FontSize="14" Height="29" Width="68"/>
 		<Label Content="Assignment" HorizontalAlignment="Left" Margin="52,2,0,0" Grid.Row="4" VerticalAlignment="Top" FontSize="14" Height="28" Width="82"/>
-		<TextBox x:Name="tbxID" Text="{Binding Path=CurrentAgent.ID}" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="6,3,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" FontSize="12" Grid.Row="1"/>
+		<TextBox x:Name="tbxID" Text="{Binding Path=CurrentAgent.ID, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="6,3,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" FontSize="12" Grid.Row="1"/>
 		<TextBox x:Name="tbxCodeName" Text="{Binding Path=CurrentAgent.CodeName, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" HorizontalAlignment="Left" Height="22" Margin="6,0,0,0" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Center" Width="264" FontSize="12"/>
-		<TextBox x:Name="tbxSpeciality" Text="{Binding Path=CurrentAgent.Speciality}" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="6,0,0,0" Grid.Row="3" TextWrapping="Wrap" VerticalAlignment="Center" Width="264" FontSize="12"/>
-		<TextBox x:Name="tbxAssignment" Text="{Binding Path=CurrentAgent.Assignment}" Grid.Column="1" HorizontalAlignment="Left" Height="76" Margin="6,7,0,0" Grid.Row="4" TextWrapping="Wrap" VerticalAlignment="Top" Width="264" FontSize="12"/>
+		<ComboBox HorizontalAlignment="Left" Margin="6,12,0,0" VerticalAlignment="Top" Width="264" ItemsSource="{Binding Source={StaticResource filtered_agents}}" Grid.Column="1" Height="25" Grid.Row="3" FontSize="12"/>
+		<TextBox x:Name="tbxAssignment" Text="{Binding Path=CurrentAgent.Assignment, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" HorizontalAlignment="Left" Height="76" Margin="6,7,0,0" Grid.Row="4" TextWrapping="Wrap" VerticalAlignment="Top" Width="264" FontSize="12"/>
 		<ListBox x:Name="txbAgents" SelectedIndex="{Binding CurrentIndex}" ItemsSource="{Binding AgentList_}" SelectedItem="{Binding CurrentAgent}" IsSynchronizedWithCurrentItem="True" Grid.Column="2" HorizontalAlignment="Left" Height="276" Margin="6,0,0,0" Grid.RowSpan="4" VerticalAlignment="Center" Width="336" Grid.Row="1">
 			<ListBox.ItemTemplate>
 				<DataTemplate>
 					<WrapPanel x:Name="wrapPanel1">
 						<TextBlock Text="{Binding Path=ID}" Width="30" x:Name="IDlist"/>
-						<TextBlock Text="{Binding Path=CodeName}" Width="100"/>
+						<TextBlock Text="{Binding Path=CodeName}" Width="80"/>
 						<TextBlock Text="{Binding Path=Speciality}" Width="100"/>
-						<TextBlock Text="{Binding Path=Assignment}" Width="200"/>
+						<TextBlock Text="{Binding Path=Assignment}" Width="150"/>
 					</WrapPanel>
+					<DataTemplate.Triggers>
+						<DataTrigger Binding="{Binding Path=ID, Converter={StaticResource HighlightConverter}, ConverterParameter='007'}" Value="true" >
+							<Setter  TargetName="wrapPanel1"  Property="TextBlock.Foreground">
+								<Setter.Value>
+									<SolidColorBrush Color="#FF4BA6AA" />
+								</Setter.Value>
+							</Setter>
+						</DataTrigger>
+					</DataTemplate.Triggers>
 				</DataTemplate>
 			</ListBox.ItemTemplate>
 		</ListBox>
@@ -135,7 +139,7 @@
 			</StatusBarItem>
 		</StatusBar>
 	</Grid>
-	
-	
+
+
 </Window>
 

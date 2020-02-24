@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -34,6 +35,20 @@ namespace AgentAssignmentNetCore
         void timer_Tick(object sender, EventArgs e)
         {
             lblTime.Content = DateTime.Now.ToString("dd/MM/yyyy HH;mm;ss");
+        }
+
+        List<string> ListOfKnown = new List<string>();
+        private void CollectionViewSource_Filter(object sender, FilterEventArgs e)
+        {
+            string p = e.Item as string;
+
+            if (ListOfKnown.Contains(p))
+                e.Accepted = false;
+            else 
+            {
+                ListOfKnown.Add(p);
+                e.Accepted = true;
+            }
         }
     }
 }

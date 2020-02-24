@@ -10,9 +10,9 @@ namespace GUI7
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            //Int64 convertedValue = System.Convert.ToInt64(value);
-            //Int64 threshold = System.Convert.ToInt64(parameter);
-            if (value == parameter)
+            string convertedValue = System.Convert.ToString(value);
+            string threshold = System.Convert.ToString(parameter);
+            if (convertedValue == threshold)
                 return true;
             return false;  
         }

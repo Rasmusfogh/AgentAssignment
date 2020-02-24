@@ -24,7 +24,6 @@ namespace GUI7
         string _filename = null;
         string _availableFiletypes = "xml files (*.xml)|*.xml";
         Agent _currentAgent = null;
-        byte r, g, b;
         public MainWindowViewModel()
         {
             AgentList.Add(new Agent("007", "Rasmus", "Rogue", "Steal yo mama"));
@@ -53,6 +52,7 @@ namespace GUI7
             set => SetProperty(ref AgentList, value);
         }
 
+
         public int CurrentIndex
         {
             get => _currentIndex;
@@ -76,7 +76,7 @@ namespace GUI7
             {
                 return _newAgent ?? (_newAgent = new DelegateCommand(() =>
                 {
-                    AgentList.Add(new Agent("000", "Code name", "What are ypu good at?", "Assign me"));
+                    AgentList.Add(new Agent("...", "...", "...", "..."));
                     CurrentIndex = AgentList.Count - 1;
                 }));
             }
@@ -170,6 +170,20 @@ namespace GUI7
             TextWriter writer = new StreamWriter(Filename);
             XML_serial.Serialize(writer, AgentList);
             writer.Close();
+        }
+    }
+
+    
+
+    public class ListOfAgent : ObservableCollection<string>
+    {
+        public ListOfAgent() : base() 
+        {
+            Add(new string("Rogue"));
+            Add(new string("Rogue"));
+            Add(new string("Rogue"));
+            Add(new string("Rogue"));
+            Add(new string("Rogue"));
         }
     }
 }
